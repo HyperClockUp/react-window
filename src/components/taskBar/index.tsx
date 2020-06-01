@@ -2,9 +2,12 @@ import * as React from "react"
 import "./index.scss"
 import * as Type from '../../interfaces/type'
 import winLogo from "../../images/Windows.svg"
+import WindowsController from '../../windowsController'
+import windowsController from "../../windowsController"
 
 interface IProps {
     size: "small" | "large" | "middle"
+    active?:boolean,
     title?: string,
     taskList:Array<Type.ITask>
 }
@@ -55,10 +58,19 @@ class TaskBar extends React.PureComponent<IProps, IState> {
         )
     }
 
+    isActive = (app:string):boolean=>{
+        let maxZIndex = Math.max.apply(null,windowsController.applicationStateList.map(item=>item.zIndex));
+        let state = windowsController.getApplicationState(app);
+
+        let curZIndex = state.zIndex;
+        let winState = state.windowState;
+        return maxZIndex===curZIndex&&winState!=='min';
+    }
+
     createTaskItem = ():Array<JSX.Element>=>{
         return this.state.taskList.map((item,index)=>{
             return (
-                <div className='task-item' key={index} onClick ={e=>{
+                <div className={[this.isActive(item.app)?'active':'','task-item'].join(' ')} key={index} onClick ={e=>{
                     if(item.windowState==='normal'||item.windowState==='max'){
                         item.action.min(e);
                     }else{

@@ -4,6 +4,9 @@ import PC from "./app/PC"
 import MsgBoardApp from "./app/MsgBoard"
 import WeatherApp from "./app/Weather"
 import BrowserApp from "./app/Browser"
+import BlogApp from './app/Blog'
+import ResumeApp from './app/Resume'
+import SiteApp from './app/Site'
 
 interface IConfig {
     appFolderUrl: string
@@ -37,15 +40,24 @@ class WindowsController {
     }
     getApplicationState = (name: string): Type.IApplication => {
         return this.applicationStateList[
-            this.applicationStateList.map((item) => item.title).indexOf(name)
+            this.applicationStateList.map((item) => item.app).indexOf(name)
         ]
+    }
+    setApplicationState = (name: string,config:any): void => {
+        let appIndex = this.applicationStateList.map((item) => item.app).indexOf(name);
+        let preState:Type.IApplication = this.applicationStateList[appIndex];
+        preState.title = config.title;
+        this.triggerEvent('update');
     }
 
     initApplist = () => {
         this.appList.push(PC)
         this.appList.push(BrowserApp)
+        this.appList.push(BlogApp)
+        this.appList.push(ResumeApp)
         this.appList.push(MsgBoardApp)
         this.appList.push(WeatherApp)
+        this.appList.push(SiteApp)
     }
 
     registerEvent = (event: event, fn: Function) => {
@@ -125,7 +137,7 @@ class WindowsController {
                     event: React.MouseEvent<HTMLButtonElement, MouseEvent>|React.MouseEvent<HTMLDivElement,MouseEvent>
                 ) => {
                     this.toppingApplication(config.title)
-                },
+                }
             },
             left: (Math.random() * document.body.offsetWidth) / 2 + "px",
             top: (Math.random() * document.body.offsetHeight) / 3 + "px",
@@ -146,6 +158,7 @@ class WindowsController {
             this.getApplicationState(app)
         )
         this.applicationStateList[minimizeIndex].windowState = "normal"
+        this.toppingApplication(app);
         this.triggerEvent("update")
     }
     maximizeApplication = (app: string) => {
@@ -153,6 +166,7 @@ class WindowsController {
             this.getApplicationState(app)
         )
         this.applicationStateList[minimizeIndex].windowState = "max"
+        this.toppingApplication(app);
         this.triggerEvent("update")
     }
     toppingApplication = (app: string) => {

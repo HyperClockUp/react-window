@@ -2,11 +2,11 @@ import App from '../index'
 import React from 'react'
 import * as Type from '../../interfaces/type'
 import './index.scss'
-import icon from "../../images/browser.png"
+import icon from "../../images/diary.png"
 
 
 let config:Type.IApp = {
-    title:'浏览器',
+    title:'博客',
     icon:icon,
     windowAction:['close','max','min'],
     taskAction:{
@@ -16,7 +16,7 @@ let config:Type.IApp = {
         open:()=>{}
     }
 }
-let BrowserApp = new App(config);
+let BlogApp = new App(config);
 
 interface IProps{
 
@@ -27,31 +27,18 @@ interface IState{
 }
 
 
-class Browser extends React.PureComponent<IProps,IState>{
+class Blog extends React.PureComponent<IProps,IState>{
     addressInput:React.RefObject<HTMLInputElement>
     constructor(props:IProps){
         super(props);
         this.state = {
-            url:''
+            url:'http://120.79.138.49:1001'
         }
         this.addressInput = React.createRef()
     }
-
-    setUrl = ()=>{
-        let dom = this.addressInput.current;
-        if(dom){
-            this.setState({
-                url:dom.value
-            })
-        }
-    }
     render(){
         return (
-            <div className='browser'>
-                <div className='navigator'>
-                    <input type="text" name="url" id="address" placeholder='请输入网址' ref={this.addressInput}/>
-                    <button id='enter' onClick={this.setUrl}>转到</button>
-                </div>
+            <div className='blog'>
                 <iframe src={this.state.url} name='main' id='frame' title='frame'></iframe>
             </div>
         )
@@ -59,7 +46,7 @@ class Browser extends React.PureComponent<IProps,IState>{
 }
 
 
-BrowserApp.setComponent(<Browser/>)
+BlogApp.setComponent(<Blog/>)
 
-export default BrowserApp;
+export default BlogApp;
 

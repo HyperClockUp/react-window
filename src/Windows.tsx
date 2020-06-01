@@ -4,13 +4,16 @@ import "./Windows.scss"
 import * as Type from "./interfaces/type"
 import TaskBar from "./components/taskBar"
 import Desktop from "./components/desktop"
+// import Welcome from './components/welcome'
 import windowsController from './windowsController'
 import App from './app'
 import { Application } from "./components/application"
 import bg from "./images/bg.jpg"
 
 interface IProps {}
-
+/**
+ * @param contextMenu:JSX.Element
+ */
 interface IState extends IProps {
     contextMenu: JSX.Element
     appList: Array<App>
@@ -112,6 +115,7 @@ class Windows extends React.PureComponent<IProps, IState> {
                         this.setState({
                             applicationStateList:tempArr
                         },()=>{
+                            windowsController.toppingApplication(item.app);
                             this.updateWindow()
                         })
                     },
@@ -224,6 +228,7 @@ class Windows extends React.PureComponent<IProps, IState> {
                             contextMenu: <div></div>,
                         })
                     }}>
+                    {/* <Welcome/> */}
                     {this.state.contextMenu}
                     <Desktop iconList={this.state.iconList} openApplication={windowsController.openApp} bgUrl={this.state.bg} />
                     {this.state.applicationList}

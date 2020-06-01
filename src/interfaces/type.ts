@@ -29,8 +29,9 @@ export interface IApplication{
     windowState:'min'|'max'|'normal',
     action:{
         close:(event:React.MouseEvent<HTMLButtonElement, MouseEvent>|React.MouseEvent<HTMLDivElement,MouseEvent>) => void,
-        [key:string]:(event: React.MouseEvent<HTMLButtonElement, MouseEvent>|React.MouseEvent<HTMLDivElement,MouseEvent>) => void
-    }
+        [key:string]:(event: React.MouseEvent<HTMLButtonElement, MouseEvent>|React.MouseEvent<HTMLDivElement,MouseEvent>) => void|Function
+    },
+    [key:string]:any
 }
 
 /**

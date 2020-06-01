@@ -26,6 +26,12 @@ interface IProps {}
 
 interface IState {
     weather: Array<any>
+    ipUrl:string,
+    ipInfo:{
+        ip:string,
+        isp:string,
+        region:string
+    }
 }
 
 class WeatherBoard extends React.PureComponent<IProps, IState> {
@@ -33,16 +39,38 @@ class WeatherBoard extends React.PureComponent<IProps, IState> {
         super(props)
         this.state = {
             weather: [],
+            ipUrl:'https://api.66mz8.com/api/ip.info.php',
+            ipInfo:{
+                ip:'',
+                isp:'',
+                region:''
+            }
         }
     }
+
+
     componentDidMount() {
-        fetch("https://api.66mz8.com/api/weather.php?location=北京")
-            .then((res) => res.json())
-            .then((json) => {
-                this.setState({
-                    weather: json.data,
-                })
+        fetch(this.state.ipUrl).then(res=>res.json()).then(r=>{
+            this.setState({
+                ipInfo:{
+                    ip:r.ip,
+                    region:r.region,
+                    isp:r.isp
+                }
             })
+
+            let reg = /(.+?)市/
+            let city:string = r.region.match(reg)[1];
+            windowsController.setApplicationState(config.title,{
+                title:`${city}天气`
+            })
+            return  fetch(`https://api.66mz8.com/api/weather.php?location=${city}`)
+        }).then((res) => res.json())
+        .then((json) => {
+            this.setState({
+                weather: json.data,
+            })
+        })
     }
 
     createWeatherList: Function = (): JSX.Element => {
@@ -58,10 +86,12 @@ class WeatherBoard extends React.PureComponent<IProps, IState> {
         return <div className="weather-list">{weatherList}</div>
     }
     render() {
-        return <div className="msg-board">{this.createWeatherList()}</div>
+        return <div className="weather">
+            {this.state.ipInfo.ip}|{this.state.ipInfo.region}{(()=>{if(this.state.ipInfo.isp){return '|' + this.state.ipInfo.isp}})()}
+            {this.createWeatherList()}
+            </div>
     }
 }
-
 WeatherApp.setComponent(<WeatherBoard />)
 
 export default WeatherApp

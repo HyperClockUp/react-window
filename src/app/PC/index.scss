@@ -2,6 +2,10 @@
     width: 100%;
     min-height: 2rem;
     background-color: white;
-    font-size: 0.2rem;
+    font-size: 0.14rem;
     color: black;
+    user-select: none;
+    .tip{
+        color: rgba(22, 110, 192, 0.76);
+    }
 }

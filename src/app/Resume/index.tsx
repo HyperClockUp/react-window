@@ -2,11 +2,11 @@ import App from '../index'
 import React from 'react'
 import * as Type from '../../interfaces/type'
 import './index.scss'
-import icon from "../../images/browser.png"
+import icon from "../../images/resume.png"
 
 
 let config:Type.IApp = {
-    title:'浏览器',
+    title:'简历',
     icon:icon,
     windowAction:['close','max','min'],
     taskAction:{
@@ -16,7 +16,7 @@ let config:Type.IApp = {
         open:()=>{}
     }
 }
-let BrowserApp = new App(config);
+let ResumeApp = new App(config);
 
 interface IProps{
 
@@ -27,31 +27,18 @@ interface IState{
 }
 
 
-class Browser extends React.PureComponent<IProps,IState>{
+class Resume extends React.PureComponent<IProps,IState>{
     addressInput:React.RefObject<HTMLInputElement>
     constructor(props:IProps){
         super(props);
         this.state = {
-            url:''
+            url:process.env.PUBLIC_URL + '/resume.pdf'
         }
         this.addressInput = React.createRef()
     }
-
-    setUrl = ()=>{
-        let dom = this.addressInput.current;
-        if(dom){
-            this.setState({
-                url:dom.value
-            })
-        }
-    }
     render(){
         return (
-            <div className='browser'>
-                <div className='navigator'>
-                    <input type="text" name="url" id="address" placeholder='请输入网址' ref={this.addressInput}/>
-                    <button id='enter' onClick={this.setUrl}>转到</button>
-                </div>
+            <div className='resume'>
                 <iframe src={this.state.url} name='main' id='frame' title='frame'></iframe>
             </div>
         )
@@ -59,7 +46,7 @@ class Browser extends React.PureComponent<IProps,IState>{
 }
 
 
-BrowserApp.setComponent(<Browser/>)
+ResumeApp.setComponent(<Resume/>)
 
-export default BrowserApp;
+export default ResumeApp;
 
