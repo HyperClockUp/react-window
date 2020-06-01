@@ -1,12 +1,12 @@
-import React from 'react';
+import * as React from "react"
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import './reset.css';
+import Windows from './Windows'
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Windows />
   </React.StrictMode>,
   document.getElementById('root')
 );
