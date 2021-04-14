@@ -8,9 +8,9 @@ import Desktop from "./components/desktop"
 import windowsController from './windowsController'
 import App from './app'
 import { Application } from "./components/application"
-import bg from "./images/bg.jpg"
+// import bg from "./images/bg.jpg"
 
-interface IProps {}
+interface IProps { }
 /**
  * @param contextMenu:JSX.Element
  */
@@ -21,8 +21,8 @@ interface IState extends IProps {
     iconList: Array<Type.IIcon>
     taskList: Array<Type.ITask>
     applicationList: Array<Application>
-    applicationStateList:Array<Type.IApplication>
-    bg:string
+    applicationStateList: Array<Type.IApplication>
+    bg: string
 }
 
 class Windows extends React.PureComponent<IProps, IState> {
@@ -32,38 +32,36 @@ class Windows extends React.PureComponent<IProps, IState> {
             contextMenu: <div></div>,
             appList: windowsController.appList,
             appOpenList: windowsController.appOpenList,
-            applicationStateList:windowsController.applicationStateList,
+            applicationStateList: windowsController.applicationStateList,
             iconList: [],
             taskList: [],
             applicationList: [],
-            bg:bg
+            bg: ''
         }
     }
-
-    componentDidMount = () => {
-        windowsController.registerEvent('update',this.updateWindow);
+    componentWillMount = () => {
+        windowsController.registerEvent('update', this.updateWindow);
         this.setState({
             iconList: this.createIconList(),
         })
-        fetch('https://api.66mz8.com/api/bing.php?idx=0&format=json').then(res=>res.json()).then(json=>{
+        fetch('https://api.66mz8.com/api/bing.php?idx=0&format=json').then(res => res.json()).then(json => {
             this.setState({
-                bg:`${json.img_url}`
+                bg: `${json.img_url}`
             })
         })
     }
-
-    updateWindow: Function = (origin:string,log:boolean): void => {
+    updateWindow: Function = (origin: string, log: boolean): void => {
         this.setState({
             appList: windowsController.appList,
             appOpenList: windowsController.appOpenList,
-            applicationStateList:windowsController.applicationStateList
-        },()=>{
+            applicationStateList: windowsController.applicationStateList
+        }, () => {
             this.setState({
                 taskList: this.createTaskList(),
                 applicationList: this.createApplicationList(),
-            },()=>{
-                if(!log){
-                    return ;
+            }, () => {
+                if (!log) {
+                    return;
                 }
                 origin = origin || "updateWindow"
                 console.log(`来自 ${origin} 的统计信息如下`)
@@ -80,16 +78,16 @@ class Windows extends React.PureComponent<IProps, IState> {
 
     createIconList: Function = (): Array<Type.IIcon> => {
         return this.state.appList.map((item, index) => {
-            let config:Type.IApp = item.getConfig();
+            let config: Type.IApp = item.getConfig();
             let tempIcon: Type.IIcon = {
-                app:config.title,
+                app: config.title,
                 action: {
-                    open: () => {},
+                    open: () => { },
                 },
                 icon: config.icon,
                 title: config.title,
             }
-            tempIcon.action.open = ()=>{
+            tempIcon.action.open = () => {
                 windowsController.openApp(config.title);
             }
             return tempIcon
@@ -99,31 +97,31 @@ class Windows extends React.PureComponent<IProps, IState> {
     createTaskList: Function = (): Array<Type.ITask> => {
         return this.state.applicationStateList.map((item, index) => {
             let tempTask: Type.ITask = {
-                app:item.app,
+                app: item.app,
                 action: {
-                    close:()=>{
+                    close: () => {
                         windowsController.killApp(item.app);
                     },
-                    normal:()=>{
+                    normal: () => {
                         let tempArr = this.state.applicationStateList.slice(0);
-                        for(let appState of tempArr){
-                            if(appState.title===item.title){
-                                appState.windowState='normal'
+                        for (let appState of tempArr) {
+                            if (appState.title === item.title) {
+                                appState.windowState = 'normal'
                                 break;
                             }
                         }
                         this.setState({
-                            applicationStateList:tempArr
-                        },()=>{
+                            applicationStateList: tempArr
+                        }, () => {
                             windowsController.toppingApplication(item.app);
                             this.updateWindow()
                         })
                     },
-                    min:()=>{
+                    min: () => {
                         windowsController.minimizeApplication(item.app);
                     }
                 },
-                windowState:item.windowState,
+                windowState: item.windowState,
                 icon: item.icon,
                 title: item.title,
             }
@@ -131,21 +129,21 @@ class Windows extends React.PureComponent<IProps, IState> {
         })
     }
 
-    createApplicationList: Function = (): Array<JSX.Element>|void => {
-        const {appOpenList,applicationStateList}=this.state;
-        if(applicationStateList.length===0){
-            let tempArr:Array<Type.IApplication> = []
-            tempArr = appOpenList.map(item=>{
+    createApplicationList: Function = (): Array<JSX.Element> | void => {
+        const { appOpenList, applicationStateList } = this.state;
+        if (applicationStateList.length === 0) {
+            let tempArr: Array<Type.IApplication> = []
+            tempArr = appOpenList.map(item => {
                 return windowsController.createApplication(item)
             })
             this.setState({
-                applicationStateList:tempArr
+                applicationStateList: tempArr
             })
-            return tempArr.map((item,index) => {
+            return tempArr.map((item, index) => {
                 return <Application windowInfo={item} key={item.title} body={this.state.appOpenList[index].getComponent()} />
             })
-        }else{
-            return applicationStateList.map((item,index) => {
+        } else {
+            return applicationStateList.map((item, index) => {
                 return <Application windowInfo={item} key={item.title} body={this.state.appOpenList[index].getComponent()} />
             })
         }
@@ -165,7 +163,7 @@ class Windows extends React.PureComponent<IProps, IState> {
             case "icon":
                 operations.push({
                     title: "属性",
-                    action: () => {},
+                    action: () => { },
                 })
                 break
             case "win":

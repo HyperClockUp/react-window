@@ -22,15 +22,15 @@ class WindowsController {
     eventBus: {
         [key in event]: Array<Function>
     } = {
-        openApp: [],
-        killApp: [],
-        registerApp: [],
-        removeApp: [],
-        update: [],
-    }
+            openApp: [],
+            killApp: [],
+            registerApp: [],
+            removeApp: [],
+            update: [],
+        }
     constructor(config?: IConfig) {
         this.config = config
-        this.initApplist()
+        this.initAppList()
     }
 
     getApp = (name: string): App => {
@@ -43,14 +43,14 @@ class WindowsController {
             this.applicationStateList.map((item) => item.app).indexOf(name)
         ]
     }
-    setApplicationState = (name: string,config:any): void => {
+    setApplicationState = (name: string, config: any): void => {
         let appIndex = this.applicationStateList.map((item) => item.app).indexOf(name);
-        let preState:Type.IApplication = this.applicationStateList[appIndex];
+        let preState: Type.IApplication = this.applicationStateList[appIndex];
         preState.title = config.title;
         this.triggerEvent('update');
     }
 
-    initApplist = () => {
+    initAppList = () => {
         this.appList.push(PC)
         this.appList.push(BrowserApp)
         this.appList.push(BlogApp)
@@ -100,6 +100,8 @@ class WindowsController {
             this.applicationStateList.push(tempApplication)
             this.triggerEvent("openApp")
             this.triggerEvent("update")
+        } else {
+            this.normalizeApplication(app);
         }
     }
 
@@ -114,27 +116,27 @@ class WindowsController {
             zIndex: this.appOpenList.length,
             action: {
                 close: (
-                    event: React.MouseEvent<HTMLButtonElement, MouseEvent>|React.MouseEvent<HTMLDivElement,MouseEvent>
+                    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLDivElement, MouseEvent>
                 ) => {
                     this.killApp(config.title)
                 },
                 min: (
-                    event: React.MouseEvent<HTMLButtonElement, MouseEvent>|React.MouseEvent<HTMLDivElement,MouseEvent>
+                    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLDivElement, MouseEvent>
                 ) => {
                     this.minimizeApplication(config.title)
                 },
                 normal: (
-                    event: React.MouseEvent<HTMLButtonElement, MouseEvent>|React.MouseEvent<HTMLDivElement,MouseEvent>
+                    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLDivElement, MouseEvent>
                 ) => {
                     this.normalizeApplication(config.title)
                 },
                 max: (
-                    event: React.MouseEvent<HTMLButtonElement, MouseEvent>|React.MouseEvent<HTMLDivElement,MouseEvent>
+                    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLDivElement, MouseEvent>
                 ) => {
                     this.maximizeApplication(config.title)
                 },
                 top: (
-                    event: React.MouseEvent<HTMLButtonElement, MouseEvent>|React.MouseEvent<HTMLDivElement,MouseEvent>
+                    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.MouseEvent<HTMLDivElement, MouseEvent>
                 ) => {
                     this.toppingApplication(config.title)
                 }
@@ -170,16 +172,23 @@ class WindowsController {
         this.triggerEvent("update")
     }
     toppingApplication = (app: string) => {
-        let toppingIndex:number = this.applicationStateList.indexOf(
+        let toppingIndex: number = this.applicationStateList.indexOf(
             this.getApplicationState(app)
         )
-        let maxZIndex:number = Math.max.apply(null,this.applicationStateList.map(item=>item.zIndex));
-        if(maxZIndex!==this.applicationStateList[toppingIndex].zIndex){
+        let maxZIndex: number = Math.max.apply(null, this.applicationStateList.map(item => item.zIndex));
+        if (maxZIndex !== this.applicationStateList[toppingIndex].zIndex) {
             this.applicationStateList[toppingIndex].zIndex = maxZIndex + 1;
-        }else{
+        } else {
             this.applicationStateList[toppingIndex].zIndex = maxZIndex;
         }
         this.triggerEvent("update");
+    }
+    checkIsTopApplication = (app: string) => {
+        let toppingIndex: number = this.applicationStateList.indexOf(
+            this.getApplicationState(app)
+        )
+        let maxZIndex: number = Math.max.apply(null, this.applicationStateList.filter(item => item.windowState === 'normal').map(item => item.zIndex));
+        return this.applicationStateList[toppingIndex].zIndex === maxZIndex;
     }
 }
 

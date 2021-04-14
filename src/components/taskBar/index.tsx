@@ -2,42 +2,41 @@ import * as React from "react"
 import "./index.scss"
 import * as Type from '../../interfaces/type'
 import winLogo from "../../images/Windows.svg"
-import WindowsController from '../../windowsController'
 import windowsController from "../../windowsController"
 
 interface IProps {
     size: "small" | "large" | "middle"
-    active?:boolean,
+    active?: boolean,
     title?: string,
-    taskList:Array<Type.ITask>
+    taskList: Array<Type.ITask>
 }
 
 interface IState extends IProps {
-    time:Date,
+    time: Date,
 }
 
 class TaskBar extends React.PureComponent<IProps, IState> {
-    timer:any;
+    timer: any;
     constructor(props: IProps) {
         super(props);
         this.state = {
             ...props,
-            time:new Date()
+            time: new Date()
         }
     }
-    componentDidMount = () =>{
-        this.timer = setInterval(()=>{
+    componentDidMount = () => {
+        this.timer = setInterval(() => {
             this.setState({
-                time:new Date()
+                time: new Date()
             })
-        },1000);
+        }, 1000);
     }
 
-    static getDerivedStateFromProps = (nextProps:IProps, prevState:IProps)=>{
+    static getDerivedStateFromProps = (nextProps: IProps, prevState: IProps) => {
         return nextProps;
     }
 
-    componentWillUnmount = () =>{
+    componentWillUnmount = () => {
         clearInterval(this.timer);
     }
     render = () => {
@@ -58,22 +57,27 @@ class TaskBar extends React.PureComponent<IProps, IState> {
         )
     }
 
-    isActive = (app:string):boolean=>{
-        let maxZIndex = Math.max.apply(null,windowsController.applicationStateList.map(item=>item.zIndex));
+    isActive = (app: string): boolean => {
+        let maxZIndex = Math.max.apply(null, windowsController.applicationStateList.map(item => item.zIndex));
         let state = windowsController.getApplicationState(app);
 
         let curZIndex = state.zIndex;
         let winState = state.windowState;
-        return maxZIndex===curZIndex&&winState!=='min';
+        return maxZIndex === curZIndex && winState !== 'min';
     }
 
-    createTaskItem = ():Array<JSX.Element>=>{
-        return this.state.taskList.map((item,index)=>{
+    createTaskItem = (): Array<JSX.Element> => {
+        return this.state.taskList.map((item, index) => {
             return (
-                <div className={[this.isActive(item.app)?'active':'','task-item'].join(' ')} key={index} onClick ={e=>{
-                    if(item.windowState==='normal'||item.windowState==='max'){
-                        item.action.min(e);
-                    }else{
+                <div className={[this.isActive(item.app) ? 'active' : '', 'task-item'].join(' ')} key={index} onClick={e => {
+                    if (item.windowState === 'normal' || item.windowState === 'max') {
+                        const isTop = windowsController.checkIsTopApplication(item.app);
+                        if (isTop) {
+                            item.action.min(e);
+                        } else {
+                            windowsController.toppingApplication(item.app);
+                        }
+                    } else {
                         item.action.normal(e);
                     }
                 }}>
@@ -91,12 +95,12 @@ class TaskBar extends React.PureComponent<IProps, IState> {
 
     getTime = (): string => {
         let h = this.state.time.getHours();
-        let m:number|string = this.state.time.getMinutes();
-        let s:number|string = this.state.time.getSeconds();
-        if(m<10){
+        let m: number | string = this.state.time.getMinutes();
+        let s: number | string = this.state.time.getSeconds();
+        if (m < 10) {
             m = '0' + m;
         }
-        if(s<10){
+        if (s < 10) {
             s = '0' + s;
         }
         return `${h}:${m}:${s}`

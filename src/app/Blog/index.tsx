@@ -5,38 +5,40 @@ import './index.scss'
 import icon from "../../images/diary.png"
 
 
-let config:Type.IApp = {
-    title:'博客',
-    icon:icon,
-    windowAction:['close','max','min'],
-    taskAction:{
-        close:()=>{}
+let config: Type.IApp = {
+    title: '博客',
+    icon: icon,
+    windowAction: ['close', 'max', 'min'],
+    taskAction: {
+        close: () => { }
     },
-    iconAction:{
-        open:()=>{}
+    iconAction: {
+        open: () => { }
     }
 }
 let BlogApp = new App(config);
 
-interface IProps{
+interface IProps {
 
 }
 
-interface IState{
-    url:string|undefined,
+interface IState {
+    url: string | undefined,
 }
 
 
-class Blog extends React.PureComponent<IProps,IState>{
-    addressInput:React.RefObject<HTMLInputElement>
-    constructor(props:IProps){
+class Blog extends React.PureComponent<IProps, IState>{
+    addressInput: React.RefObject<HTMLInputElement>
+    constructor(props: IProps) {
         super(props);
+        const { protocol, hostname } = window.location;
+        const port = 1001;
         this.state = {
-            url:'http://120.79.138.49:1001'
+            url: `${protocol}//${hostname}:${port}`
         }
-        this.addressInput = React.createRef()
+        this.addressInput = React.createRef();
     }
-    render(){
+    render() {
         return (
             <div className='blog'>
                 <iframe src={this.state.url} name='main' id='frame' title='frame'></iframe>
@@ -46,7 +48,7 @@ class Blog extends React.PureComponent<IProps,IState>{
 }
 
 
-BlogApp.setComponent(<Blog/>)
+BlogApp.setComponent(<Blog />)
 
 export default BlogApp;
 
