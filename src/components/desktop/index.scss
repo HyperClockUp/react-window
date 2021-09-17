@@ -1,0 +1,50 @@
+.desktop {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 0.2rem 0.2rem 0.5rem 0rem;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-size: 0.16rem;
+    overflow: hidden;
+
+    .selection {
+        background-color: rgba(255, 255, 255, 0.4);
+        position: absolute;
+    }
+
+    .icon-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-content: flex-start;
+        width: 100%;
+        height: 100%;
+        padding-inline-start: 0.1rem;
+        user-select: none;
+
+        .icon-item {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            padding: 0.1rem 0.1rem 0 0.1rem;
+            margin-bottom: 0.1rem;
+            box-sizing: border-box;
+            cursor: default;
+            border: 1px solid transparent;
+
+            &:hover {
+                border-color: rgba(255, 255, 255, 0.2);
+                background-color: rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        .active {
+            border-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+    }
+}

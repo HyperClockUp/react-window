@@ -1,0 +1,44 @@
+.welcome{
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 9999999;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url('../../images/windowBg.jpg');
+    .login-area{
+        width: 3rem;
+        min-height: 3rem;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .user-name{
+            margin: 0.5rem 0;
+            font-size: 0.4rem;
+            font-weight: bold;
+            color: white;
+        }
+        .login-btn{
+            font-size: 0.2rem;
+            width: 1rem;
+            padding: 0.1rem 0.2rem;
+        }
+    }
+    .loading{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        width:2rem;
+        height: 2rem;
+        background-color: rgba(0,0,0,0.5);
+        font-size: 0.2rem;
+    }
+}
