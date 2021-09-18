@@ -1,29 +1,29 @@
-.browser{
-    width: 10rem;
-    min-height: 2rem;
-    background-color: white;
-    font-size: 0.2rem;
-    color: black;
-    .navigator{
-        width: 100%;
-        font-size: 0.14rem;
-        height: 0.2rem;
-        display: flex;
-        #address{
-            flex: 1;
-        }
-        #enter{
-            width: 0.5rem;
-            height: 100%;
-            outline: none;
-            text-decoration: none;
-        }
+.browser {
+  width: 10rem;
+  min-height: 2rem;
+  background-color: white;
+  font-size: 0.2rem;
+  color: black;
+  .navigator {
+    width: 100%;
+    font-size: 0.14rem;
+    height: 0.2rem;
+    display: flex;
+    #address {
+      flex: 1;
     }
+    #enter {
+      width: 0.5rem;
+      height: 100%;
+      outline: none;
+      text-decoration: none;
+    }
+  }
 
-    #frame{
-        width: 100%;
-        height: 5rem;
-        overflow:auto auto;
-        border: none;
-    }
+  #frame {
+    width: 100%;
+    height: 5rem;
+    overflow: auto auto;
+    border: none;
+  }
 }

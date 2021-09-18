@@ -12,14 +12,11 @@ module.exports = {
     path: path.resolve(__dirname, '../dist'),
     clean: true,
   },
-  devtool:"eval-source-map",
+  devtool: "eval-source-map",
   devServer: {
     static: {
       directory: path.join(__dirname, '../public'),
     },
-    allowedHosts: [
-      'api.66mz8.com/'
-    ],
     compress: true,
     port: 9000,
     open: true,
@@ -31,7 +28,11 @@ module.exports = {
         loader: "babel-loader",
         exclude: /node_modules/,
         options: {
-          presets: ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"]
+          presets: ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
+          plugins: [
+            "@babel/proposal-class-properties",
+            "@babel/proposal-object-rest-spread"
+          ]
         }
       },
       {
@@ -63,7 +64,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title:"window 10",
+      title: "window 10",
       template: 'public/index.html'
     })
   ]
